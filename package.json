@@ -1,0 +1,36 @@
+{
+	"name": "@jfabello/http-test-server",
+	"version": "0.1.0",
+	"description": "HTTP Test Server.",
+	"keywords": [
+		"http",
+		"server",
+		"test"
+	],
+	"license": "MIT",
+	"author": {
+		"name": "Juan F. Abello",
+		"email": "juan@jfabello.com"
+	},
+	"main": "src/http-test-server.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jfabello/http-test-server.git"
+	},
+	"scripts": {
+		"test": "jest --watchAll --coverage",
+		"start": "node utils/start-http-test-server.js"
+	},
+	"dependencies": {
+		"@jfabello/common-errors": "^1.0.0",
+		"@jfabello/system-errors": "^1.0.0",
+		"chalk": "^4.0"
+	},
+	"devDependencies": {
+		"jest": "^29.0",
+		"@jest/globals": "^29.0"
+	},
+	"engines": {
+		"node": ">=18"
+	}
+}
