@@ -112,6 +112,15 @@ class HTTPTestServer {
 	 * @type {number}
 	 * @description The port of the HTTP Test Server instance.
 	 */
+	get serverPort() {
+		return this.#serverPort;
+	}
+
+	/**
+	 * @deprecated
+	 * @type {number}
+	 * @description The port of the HTTP Test Server instance (alias of the serverPort property).
+	 */
 	get port() {
 		return this.#serverPort;
 	}

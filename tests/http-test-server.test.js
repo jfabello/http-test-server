@@ -279,7 +279,7 @@ describe("HTTP Test Server tests", () => {
 		let httpTestServerInstance1 = new HTTPTestServer({ serverHost: "127.0.0.1", serverPort: 8000 });
 		let httpTestServerInstance1StartPromise = httpTestServerInstance1.start();
 		let httpTestServerInstance1StartResult = await httpTestServerInstance1StartPromise;
-		expect(httpTestServerInstance1.port).toBe(8000);
+		expect(httpTestServerInstance1.serverPort).toBe(8000);
 		let httpTestServerInstance1StopPromise = httpTestServerInstance1.stop();
 		let httpTestServerInstance1StopResult = await httpTestServerInstance1StopPromise;
 	});
@@ -289,8 +289,8 @@ describe("HTTP Test Server tests", () => {
 		let httpTestServerInstance1 = new HTTPTestServer({ serverHost: "127.0.0.1", serverPort: 8000 });
 		let httpTestServerInstance1StartPromise = httpTestServerInstance1.start();
 		let httpTestServerInstance1StartResult = await httpTestServerInstance1StartPromise;
-		expect(httpTestServerInstance1.port).toBeGreaterThan(0);
-		expect(httpTestServerInstance1.port).toBeLessThan(65536);
+		expect(httpTestServerInstance1.serverPort).toBeGreaterThan(0);
+		expect(httpTestServerInstance1.serverPort).toBeLessThan(65536);
 		let httpTestServerInstance1StopPromise = httpTestServerInstance1.stop();
 		let httpTestServerInstance1StopResult = await httpTestServerInstance1StopPromise;
 	});

@@ -159,7 +159,7 @@ stateDiagram-v2
 ### Instance Properties
 
 - `state`: The state of the HTTP Test Server instance.
-- `port`: The port of the HTTP Test Server instance.
+- `serverPort`: The port of the HTTP Test Server instance.
 
 ### Instance Methods
 
