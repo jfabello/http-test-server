@@ -553,7 +553,7 @@ class HTTPTestServer {
 				return;
 			}
 
-			// Executes the check string path
+			// Executes the check silent response path
 			if (url.pathname === "/silentresponse") {
 				console.log("Silent response path requested.");
 
