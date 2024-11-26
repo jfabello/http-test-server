@@ -114,6 +114,29 @@ This route checks if the request body matches a predefined string pattern. If th
 
 This route requires that the HTTP request method is set to `POST`, and the `Content-Type` header is set to `text/plain`.
 
+### `/checkjson`
+
+This route checks if the request body matches a predefined JSON object. If the JSON object matches, it sends the object back, perhaps with properties in a different order; otherwise, it sends a 400 HTTP status code. It is useful for testing if the client is handling and converting JSON data correctly.
+
+This is the default JSON object:
+
+```json
+{
+	"firstName": "John",
+	"lastName": "Doe",
+	"age": 25,
+	"address": {
+		"street": "Somewhere",
+		"city": "Anytown",
+		"state": "CA",
+		"zip": 12345
+	},
+	"isActive": true
+}
+```
+
+This route requires that the HTTP request method is set to `POST`, and the `Content-Type` header is set to `application/json`.
+
 ### `/silentresponse`
 
 This route sends a `204 No Content` HTTP status code response to the client. It is useful for testing how clients handle responses with no content.

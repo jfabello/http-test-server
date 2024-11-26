@@ -12,6 +12,7 @@
 const http = require("node:http");
 const crypto = require("node:crypto");
 const chalk = require("chalk");
+const lodash = require("lodash");
 
 // Defaults
 const defaults = require("./defaults.js");
@@ -553,6 +554,87 @@ class HTTPTestServer {
 				return;
 			}
 
+			// Executes the check JSON path
+			if (url.pathname === "/checkjson") {
+				console.log("Check JSON path requested.");
+
+				// Checks if the request has the correct method
+				if (request.method.toUpperCase() !== "POST") {
+					this.#sendPlainTextResponseWithLogging(response, 400, "The HTTP request method is not POST.");
+					return;
+				}
+
+				// Checks if the request has the correct content-type header
+				if ("content-type" in request.headers === false || request.headers["content-type"].toLowerCase() !== "application/json") {
+					this.#sendPlainTextResponseWithLogging(response, 400, 'The HTTP request "Content-Type" header is not "application/json".');
+					return;
+				}
+
+				// Parses the HTTP request body
+				let requestBodyObject = null;
+				try {
+					requestBodyObject = JSON.parse(requestBodyBuffer.toString("utf8"));
+				} catch (error) {
+					this.#sendPlainTextResponseWithLogging(response, 400, "The HTTP request body is not parseable as JSON.");
+					return;
+				}
+
+				// Checks if the HTTP request body object matches the pattern JSON object
+				if (lodash.isEqual(requestBodyObject, defaults.JSON_OBJECT) === false) {
+					this.#sendPlainTextResponseWithLogging(response, 400, "The HTTP request body JSON object does not match the pattern JSON object.");
+					return;
+				}
+
+				console.log("The HTTP request JSON object matches.");
+
+				requestBodyObject = null; // Reduces memory usage
+
+				console.log("Sending the HTTP response JSON object...");
+
+				const responseBodyBuffer = Buffer.from(JSON.stringify(defaults.JSON_OBJECT), "utf8");
+
+				response.setHeader("Content-Type", "application/json");
+				response.setHeader("Content-Length", responseBodyBuffer.length);
+				response.writeHead(200);
+
+				let responseBodyBufferPointer = 0;
+				let responseBodyBufferSize = responseBodyBuffer.length;
+				let maxResponseChunkSize = response.writableHighWaterMark;
+
+				let writeResponseBody = () => {
+					while (responseBodyBufferPointer < responseBodyBufferSize) {
+						let writeResponseBodyResult = null;
+						let responseBodyChunkSize = null;
+						let responseBodyChunk = null;
+
+						// Calculates the HTTP response body chunk size
+						if (responseBodyBufferSize - responseBodyBufferPointer < maxResponseChunkSize) {
+							responseBodyChunkSize = responseBodyBufferSize - responseBodyBufferPointer;
+						} else {
+							responseBodyChunkSize = maxResponseChunkSize;
+						}
+
+						// Gets a chunk of the HTTP response body buffer
+						responseBodyChunk = responseBodyBuffer.subarray(responseBodyBufferPointer, responseBodyBufferPointer + responseBodyChunkSize);
+
+						// Writes a chunk of the HTTP response body buffer
+						writeResponseBodyResult = response.write(responseBodyChunk);
+						responseBodyBufferPointer = responseBodyBufferPointer + responseBodyChunkSize;
+						if (writeResponseBodyResult === false) {
+							response.once("drain", writeResponseBody);
+							return;
+						}
+					}
+					// Finishes writing the response body
+					console.log("Finished sending the HTTP response JSON object.");
+					response.end();
+				};
+
+				writeResponseBody();
+
+				return;
+			}
+
 			// Executes the check silent response path
 			if (url.pathname === "/silentresponse") {
 				console.log("Silent response path requested.");
@@ -652,6 +734,20 @@ class HTTPTestServer {
 				console.log("Noisy timeout timer cleared.");
 			}
 		}
+	}
+
+	/**
+	 * Sends a plain text message as the HTTP response and logs the message to the console
+	 * @param {http.ServerResponse} response The HTTP server response object
+	 * @param {number} statusCode The HTTP status code
+	 * @param {string} message The HTTP response message
+	 * @private
+	 */
+	#sendPlainTextResponseWithLogging(response, statusCode, message) {
+		console.log(message);
+		response.setHeader("Content-Type", "text/plain; charset=UTF-8");
+		response.writeHead(statusCode);
+		response.end(message);
 	}
 }
 

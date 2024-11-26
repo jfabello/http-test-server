@@ -1,6 +1,6 @@
 {
 	"name": "@jfabello/http-test-server",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "HTTP Test Server.",
 	"keywords": [
 		"http",
@@ -24,11 +24,12 @@
 	"dependencies": {
 		"@jfabello/common-errors": "^1.0.0",
 		"@jfabello/system-errors": "^1.0.0",
-		"chalk": "^4.0"
+		"chalk": "^4.0.0",
+		"lodash": "^4.0.0"
 	},
 	"devDependencies": {
-		"jest": "^29.0",
-		"@jest/globals": "^29.0"
+		"jest": "^29.0.0",
+		"@jest/globals": "^29.0.0"
 	},
 	"engines": {
 		"node": ">=18"
