@@ -8,29 +8,52 @@ The `http-test-server` module provides a simple HTTP test server. It is designed
 
 - [Installation](#installation)
 - [Usage](#usage)
-	- [Using the `HTTPTestServer` Class](#using-the-httptestserver-class)
-	- [Using the HTTP Test Server Start-Up Facility](#using-the-http-test-server-start-up-facility)
+  - [Using the `HTTPTestServer` Class](#using-the-httptestserver-class)
+  - [Using the HTTP Test Server Start-Up Facility](#using-the-http-test-server-start-up-facility)
 - [HTTP Test Server Routes (URLs)](#http-test-server-routes-urls)
-	- [`/silentrejection`](#silentrejection)
-	- [`/silenttimeout`](#silenttimeout)
-	- [`/noisyrejection`](#noisyrejection)
-	- [`/noisytimeout`](#noisytimeout)
-	- [`/bigrandomfile`](#bigrandomfile)
-	- [`/checkpattern`](#checkpattern)
-	- [`/checkstring`](#checkstring)
-	- [`/checkjson`](#checkjson)
-	- [`/silentresponse`](#silentresponse)
-	- [`/stop`](#stop)
-	- [`/` or any other route](#or-any-other-route)
+  - [`/silentrejection`](#silentrejection)
+  - [`/silenttimeout`](#silenttimeout)
+  - [`/noisyrejection`](#noisyrejection)
+  - [`/noisytimeout`](#noisytimeout)
+  - [`/bigrandomfile`](#bigrandomfile)
+  - [`/checkpattern`](#checkpattern)
+  - [`/checkstring`](#checkstring)
+  - [`/checkjson`](#checkjson)
+  - [`/silentresponse`](#silentresponse)
+  - [`/stop`](#stop)
+  - [`/` or any other route](#or-any-other-route)
 - [Modifying the Defaults](#modifying-the-defaults)
 - [HTTP Test Server States](#http-test-server-states)
 - [The `HTTPTestServer` Class](#the-httptestserver-class)
-	- [Static Properties](#static-properties)
-	- [Instance Properties](#instance-properties)
-	- [Instance Methods](#instance-methods)
+  - [Static Properties](#static-properties)
+  - [Instance Properties](#instance-properties)
+  - [Instance Methods](#instance-methods)
+    - [`constructor()`](#constructor)
+    - [`start()`](#start)
+    - [`stop()`](#stop)
 - [Testing](#testing)
 - [Contributing](#contributing)
 - [License](#license)
+
+## What is New
+
+### Version 0.4.0
+
+- `SimpleTimer` is now an ES6 module. This provides better support for tools like ESLint 9 and a cleaner code syntax.
+- Updated the minimum Node.js engine version required to 20.
+
+### Version 0.3.0
+
+- Added the `/checkjson` route.
+
+### Version 0.2.0
+
+- Added the `serverPort` property to the `HTTPTestServer` class for consistency with the constructor options.
+- Deprecated the `port` property of the `HTTPTestServer` class.
+
+### Version 0.1.0
+
+- Intial release.
 
 ## Installation
 
@@ -47,7 +70,7 @@ To use the `http-test-server` module, you can import it into your code and then 
 ### Using the `HTTPTestServer` Class
 
 ```javascript
-const httpTestServer = require("@jfabello/http-test-server");
+import { HTTPTestServer } from "@jfabello/http-test-server";
 
 async function someAsyncFunction() {
 	// Create a new HTTP Test Server instance
