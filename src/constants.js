@@ -12,4 +12,4 @@ const constants = {};
 
 Object.freeze(constants);
 
-module.exports = constants;
+export { constants };

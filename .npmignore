@@ -22,3 +22,6 @@ package-lock.json
 # Ignore the test files
 /tests/
 *.test.js
+
+# Ignore the ESLint configuration files
+eslint.config.js

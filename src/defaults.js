@@ -21,20 +21,20 @@ defaults.BIG_FILE_SIZE = 500 * 1000 * 1000; // 500 MB
 defaults.PATTERN_STRING = "This is a pattern!";
 defaults.PATTERN_ENCODING = "utf8";
 defaults.PATTERN_SIZE = 2 * 1000 * 1000; // 2 MB
-defaults.PATTERN_STRING_REPEAT = 100000 // Repeats a hundred thousand times
+defaults.PATTERN_STRING_REPEAT = 100000; // Repeats a hundred thousand times
 defaults.JSON_OBJECT = {
-	"firstName": "John",
-	"lastName": "Doe",
-	"age": 25,
-	"address": {
-		"street": "Somewhere",
-		"city": "Anytown",
-		"state": "CA",
-		"zip": 12345
+	firstName: "John",
+	lastName: "Doe",
+	age: 25,
+	address: {
+		street: "Somewhere",
+		city: "Anytown",
+		state: "CA",
+		zip: 12345
 	},
-	"isActive": true
+	isActive: true
 };
 
 Object.freeze(defaults);
 
-module.exports = defaults;
+export { defaults };

@@ -9,20 +9,20 @@
 "use strict";
 
 // Module imports
-const http = require("node:http");
-const crypto = require("node:crypto");
-const chalk = require("chalk");
-const lodash = require("lodash");
+import http from "node:http";
+import crypto from "node:crypto";
+import chalk from "chalk";
+import lodash from "lodash";
 
 // Defaults
-const defaults = require("./defaults.js");
+import { defaults } from "./defaults.js";
 
 // Errors
-const systemErrors = require("@jfabello/system-errors");
-const errors = require("./errors.js");
+import { createErrorFromSystemErrorCode } from "@jfabello/system-errors";
+import { errors } from "./errors.js";
 
 // Regexes
-const regexes = require("./regexes.js");
+import { regexes } from "./regexes.js";
 
 /**
  * HTTP Test Server for the promise-based HTTP and HTTPS client for Node.js.
@@ -199,7 +199,7 @@ class HTTPTestServer {
 
 			this.#serverInstance.once("error", (error) => {
 				this.#serverState = previousState;
-				reject(systemErrors.createErrorFromSystemErrorCode(error["code"]));
+				reject(createErrorFromSystemErrorCode(error["code"]));
 			});
 
 			this.#serverInstance.listen({ port: this.#serverPort, host: this.#serverHost });
@@ -235,7 +235,7 @@ class HTTPTestServer {
 
 			this.#serverInstance.once("error", (error) => {
 				this.#serverState = previousState;
-				reject(systemErrors.createErrorFromSystemErrorCode(error["code"]));
+				reject(createErrorFromSystemErrorCode(error["code"]));
 			});
 
 			this.#serverInstance.close();
@@ -581,7 +581,7 @@ class HTTPTestServer {
 				let requestBodyObject = null;
 				try {
 					requestBodyObject = JSON.parse(requestBodyBuffer.toString("utf8"));
-				} catch (error) {
+				} catch {
 					this.#sendPlainTextResponseWithLogging(response, 400, "The HTTP request body is not parseable as JSON.");
 					return;
 				}
@@ -757,4 +757,4 @@ class HTTPTestServer {
 	}
 }
 
-module.exports = HTTPTestServer;
+export { HTTPTestServer };

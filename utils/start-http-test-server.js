@@ -9,7 +9,7 @@
 "use strict";
 
 // Module imports
-const HTTPTestServer = require("../src/http-test-server.js");
+import { HTTPTestServer } from "../src/http-test-server.js";
 
 main();
 
