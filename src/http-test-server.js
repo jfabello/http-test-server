@@ -193,7 +193,7 @@ class HTTPTestServer {
 
 			this.#serverInstance.once("error", (error) => {
 				this.#serverState = previousState;
-				reject(new systemErrors.createErrorFromSystemErrorCode(error.code));
+				reject(systemErrors.createErrorFromSystemErrorCode(error.code));
 			});
 
 			this.#serverInstance.listen({ port: this.#serverPort, host: this.#serverHost });
@@ -229,7 +229,7 @@ class HTTPTestServer {
 
 			this.#serverInstance.once("error", (error) => {
 				this.#serverState = previousState;
-				reject(new systemErrors.createErrorFromSystemErrorCode(error.code));
+				reject(systemErrors.createErrorFromSystemErrorCode(error.code));
 			});
 
 			this.#serverInstance.close();
@@ -241,7 +241,6 @@ class HTTPTestServer {
 	/**
 	 * @description Processes the HTTP server request
 	 * @async
-	 * @private
 	 * @param {http.IncomingMessage} request The HTTP server request object
 	 * @param {http.ServerResponse} response The HTTP server response object
 	 */
@@ -271,7 +270,7 @@ class HTTPTestServer {
 
 		// Processes the HTTP server request "error" event
 		request.on("error", (error) => {
-			console.log(`An ${error.code} error occurred while receiving the request.`);
+			console.log(`An ${error["code"]} error occurred while receiving the request.`);
 
 			clearTimersAndIntervals();
 
@@ -281,7 +280,7 @@ class HTTPTestServer {
 
 		// Processes the HTTP server response "error" event
 		response.on("error", (error) => {
-			console.log(`An ${error.code} error occurred while sending the response.`);
+			console.log(`An ${error["code"]} error occurred while sending the response.`);
 
 			clearTimersAndIntervals();
 
@@ -433,6 +432,7 @@ class HTTPTestServer {
 				console.log("Check pattern path requested.");
 
 				// Creates a new Buffer object with the pattern
+				// @ts-expect-error
 				let patternBuffer = Buffer.alloc(defaults.PATTERN_SIZE, defaults.PATTERN_STRING, defaults.PATTERN_ENCODING);
 
 				// Checks if the request has the correct method, content-type header and body
@@ -496,6 +496,7 @@ class HTTPTestServer {
 				console.log("Check string path requested.");
 
 				// Creates a new Buffer object with the pattern
+				// @ts-expect-error
 				let patternBuffer = Buffer.from(defaults.PATTERN_STRING.repeat(defaults.PATTERN_STRING_REPEAT), defaults.PATTERN_ENCODING);
 
 				// Checks if the request has the correct method, content-type header and body
@@ -741,7 +742,6 @@ class HTTPTestServer {
 	 * @param {http.ServerResponse} response The HTTP server response object
 	 * @param {number} statusCode The HTTP status code
 	 * @param {string} message The HTTP response message
-	 * @private
 	 */
 	#sendPlainTextResponseWithLogging(response, statusCode, message) {
 		console.log(message);

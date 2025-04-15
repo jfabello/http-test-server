@@ -9,7 +9,7 @@
 "use strict";
 
 // Module imports
-const { expect, test } = require("@jest/globals");
+const { describe, test, expect } = require("@jest/globals");
 const HTTPTestServer = require("../src/http-test-server.js");
 
 describe("HTTP Test Server tests", () => {
@@ -21,16 +21,19 @@ describe("HTTP Test Server tests", () => {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_HOST_TYPE_INVALID);
 		}
 		try {
+			// @ts-expect-error
 			let httpTestServerInstance = new HTTPTestServer({ serverHost: 1234 });
 		} catch (error) {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_HOST_TYPE_INVALID);
 		}
 		try {
+			// @ts-expect-error
 			let httpTestServerInstance = new HTTPTestServer({ serverHost: ["hostname"] });
 		} catch (error) {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_HOST_TYPE_INVALID);
 		}
 		try {
+			// @ts-expect-error
 			let httpTestServerInstance = new HTTPTestServer({ serverHost: { serverHost: "hostname" } });
 		} catch (error) {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_HOST_TYPE_INVALID);
@@ -79,16 +82,19 @@ describe("HTTP Test Server tests", () => {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_PORT_TYPE_INVALID);
 		}
 		try {
+			// @ts-expect-error
 			let httpTestServerInstance = new HTTPTestServer({ serverPort: "1234" });
 		} catch (error) {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_PORT_TYPE_INVALID);
 		}
 		try {
+			// @ts-expect-error
 			let httpTestServerInstance = new HTTPTestServer({ serverPort: [1234] });
 		} catch (error) {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_PORT_TYPE_INVALID);
 		}
 		try {
+			// @ts-expect-error
 			let httpTestServerInstance = new HTTPTestServer({ serverPort: { serverPort: 1234 } });
 		} catch (error) {
 			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_PORT_TYPE_INVALID);
