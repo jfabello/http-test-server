@@ -1,6 +1,6 @@
 /**
+ * HTTP Test Server defaults.
  * @module httptestserver-defaults
- * @description HTTP Test Server defaults.
  * @license MIT
  * @author Juan F. Abello <juan@jfabello.com>
  */

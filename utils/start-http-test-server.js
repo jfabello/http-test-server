@@ -1,6 +1,6 @@
 /**
+ * HTTP Test Server start-up facility.
  * @module start-http-test-server
- * @description HTTP Test Server start-up facility
  * @license MIT
  * @author Juan F. Abello <juan@jfabello.com>
  */

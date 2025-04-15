@@ -1,6 +1,6 @@
 /**
+ * HTTP Test Server constants.
  * @module http-test-server-constants
- * @description HTTP Test Server constants.
  * @license MIT
  * @author Juan F. Abello <juan@jfabello.com>
  */

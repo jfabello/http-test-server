@@ -1,6 +1,6 @@
 /**
+ * HTTP Test Server regexes.
  * @module http-test-server-regexes
- * @description HTTP Test Server regexes.
  * @license MIT
  * @author Juan F. Abello <juan@jfabello.com>
  */

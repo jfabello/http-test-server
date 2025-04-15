@@ -1,6 +1,6 @@
 /**
+ * HTTP Test Server tests.
  * @module http-test-server-tests
- * @description HTTP Test Server tests.
  * @license MIT
  * @author Juan F. Abello <juan@jfabello.com>
  */
@@ -9,6 +9,7 @@
 "use strict";
 
 // Module imports
+const systemErrors = require("@jfabello/system-errors");
 const { describe, test, expect } = require("@jest/globals");
 const HTTPTestServer = require("../src/http-test-server.js");
 
@@ -274,7 +275,7 @@ describe("HTTP Test Server tests", () => {
 		try {
 			await httpTestServerInstance2StartPromise;
 		} catch (error) {
-			expect(error).toBeInstanceOf(HTTPTestServer.errors.ERROR_ADDRESS_IN_USE);
+			expect(error).toBeInstanceOf(systemErrors.ERROR_ADDRESS_IN_USE);
 		}
 		let httpTestServerInstance1StopPromise = httpTestServerInstance1.stop();
 		let httpTestServerInstance1StopResult = await httpTestServerInstance1StopPromise;

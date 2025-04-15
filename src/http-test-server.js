@@ -1,6 +1,6 @@
 /**
+ * HTTP Test Server.
  * @module jfabello/http-test-server
- * @description HTTP Test Server.
  * @license MIT
  * @author Juan F. Abello <juan@jfabello.com>
  */
@@ -18,18 +18,15 @@ const lodash = require("lodash");
 const defaults = require("./defaults.js");
 
 // Errors
-const commonErrors = require("@jfabello/common-errors");
 const systemErrors = require("@jfabello/system-errors");
-const httpTestServerErrors = require("./errors.js");
-const errors = Object.assign({}, httpTestServerErrors, systemErrors, commonErrors);
-delete errors.createErrorFromSystemErrorCode;
-Object.freeze(errors);
+const errors = require("./errors.js");
 
 // Regexes
 const regexes = require("./regexes.js");
 
 /**
- * @description HTTP Test Server for the promise-based HTTP and HTTPS client for Node.js.
+ * HTTP Test Server for the promise-based HTTP and HTTPS client for Node.js.
+ * @class HTTPTestServer
  */
 class HTTPTestServer {
 	// Private class constants
@@ -40,95 +37,104 @@ class HTTPTestServer {
 	static #STOPPED = Symbol("STOPPED");
 
 	// Private instance variables
-	#serverInstance = null;
-	#serverHost = null;
-	#serverPort = null;
-	#serverState = null;
-	#serverStartPromise = null;
-	#serverStopPromise = null;
+	/** @type {http.Server} */ #serverInstance = null;
+	/** @type {string} */ #serverHost = null;
+	/** @type {number} */ #serverPort = null;
+	/** @type {symbol} */ #serverState = null;
+	/** @type {Promise<symbol>} */ #serverStartPromise = null;
+	/** @type {Promise<symbol>} */ #serverStopPromise = null;
 
 	/**
+	 * Read-only property representing the CREATED server state.
 	 * @static
-	 * @type {Symbol}
-	 * @description Read-only property representing the CREATED server state.
+	 * @readonly
+	 * @type {symbol}
 	 */
 	static get CREATED() {
 		return HTTPTestServer.#CREATED;
 	}
 
 	/**
+	 * Read-only property representing the STARTING server state.
 	 * @static
-	 * @type {Symbol}
-	 * @description Read-only property representing the STARTING server state.
+	 * @readonly
+	 * @type {symbol}
 	 */
 	static get STARTING() {
 		return HTTPTestServer.#STARTING;
 	}
 
 	/**
+	 * Read-only property representing the LISTENING server state.
 	 * @static
-	 * @type {Symbol}
-	 * @description Read-only property representing the LISTENING server state.
+	 * @readonly
+	 * @type {symbol}
 	 */
 	static get LISTENING() {
 		return HTTPTestServer.#LISTENING;
 	}
 
 	/**
+	 * Read-only property representing the STOPPING server state.
 	 * @static
-	 * @type {Symbol}
-	 * @description Read-only property representing the STOPPING server state.
+	 * @readonly
+	 * @type {symbol}
 	 */
 	static get STOPPING() {
 		return HTTPTestServer.#STOPPING;
 	}
 
 	/**
+	 * Read-only property representing the STOPPED server state.
 	 * @static
-	 * @type {Symbol}
-	 * @description Read-only property representing the STOPPED server state.
+	 * @readonly
+	 * @type {symbol}
 	 */
 	static get STOPPED() {
 		return HTTPTestServer.#STOPPED;
 	}
 
 	/**
+	 * Read-only property that contains the HTTP Test Server error classes as properties.
 	 * @static
+	 * @readonly
 	 * @type {object}
-	 * @description Read-only property that contains the HTTP Test Server error classes as properties.
 	 */
 	static get errors() {
 		return errors;
 	}
 
 	/**
-	 * @type {Symbol}
-	 * @description The state of the HTTP Test Server instance.
+	 * The state of the HTTP Test Server instance.
+	 * @readonly
+	 * @type {symbol}
 	 */
 	get state() {
 		return this.#serverState;
 	}
 
 	/**
+	 * The port of the HTTP Test Server instance.
+	 * @readonly
 	 * @type {number}
-	 * @description The port of the HTTP Test Server instance.
 	 */
 	get serverPort() {
 		return this.#serverPort;
 	}
 
 	/**
+	 * The port of the HTTP Test Server instance (alias of the serverPort property).
+	 * @readonly
 	 * @deprecated
 	 * @type {number}
-	 * @description The port of the HTTP Test Server instance (alias of the serverPort property).
 	 */
 	get port() {
 		return this.#serverPort;
 	}
 
 	/**
-	 * @description Creates a new instance of the HTTP Test Server.
-	 * @param {Object} [options={}] The HTTP Test Server configuration options object.
+	 * Creates a new instance of the HTTP Test Server.
+	 * @param {object} [options={}] The HTTP Test Server configuration options object.
 	 * @param {string} [options.serverHost=defaults.SERVER_HOST] The HTTP Test Server host (default: 127.0.0.1).
 	 * @param {number} [options.serverPort=defaults.SERVER_PORT] The HTTP Test Server port (default: 8080).
 	 * @throws {ERROR_HTTP_TEST_SERVER_HOST_TYPE_INVALID} If the HTTP Test Server host argument type is not a string.
@@ -165,9 +171,9 @@ class HTTPTestServer {
 	}
 
 	/**
-	 * @description Starts the HTTP Test Server instance. If the server is in the STARTING or LISTENING states, it returns the existing promise.
-	 * @returns {Promise} A promise that resolves to HTTPTestServer.LISTENING if the HTTP Test Server starts succesffully, or rejects to an error if the HTTP Test Server start fails.
-	 * @throws {HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_NOT_IN_STARTABLE_STATE} If the HTTP Test Server is not in a state where it is possible to start it up.
+	 * Starts the HTTP Test Server instance. If the server is in the STARTING or LISTENING states, it returns the existing promise.
+	 * @returns {Promise<symbol>} A promise that resolves to HTTPTestServer.LISTENING if the HTTP Test Server starts succesffully, or rejects to an error if the HTTP Test Server start fails.
+	 * @throws {ERROR_HTTP_TEST_SERVER_NOT_IN_STARTABLE_STATE} If the HTTP Test Server is not in a state where it is possible to start it up.
 	 */
 	start() {
 		if (this.#serverState === HTTPTestServer.#STARTING || this.#serverState === HTTPTestServer.#LISTENING) {
@@ -175,7 +181,7 @@ class HTTPTestServer {
 		}
 
 		if (this.#serverState !== HTTPTestServer.#CREATED && this.#serverState !== HTTPTestServer.#STOPPED) {
-			throw new HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_NOT_IN_STARTABLE_STATE();
+			throw new errors.ERROR_HTTP_TEST_SERVER_NOT_IN_STARTABLE_STATE();
 		}
 
 		const previousState = this.#serverState;
@@ -184,8 +190,8 @@ class HTTPTestServer {
 
 		this.#serverStartPromise = new Promise((resolve, reject) => {
 			this.#serverInstance.once("listening", () => {
-				this.#serverHost = this.#serverInstance.address().address;
-				this.#serverPort = this.#serverInstance.address().port;
+				this.#serverHost = this.#serverInstance.address()["address"];
+				this.#serverPort = this.#serverInstance.address()["port"];
 				console.log(chalk.whiteBright(`HTTP Test Server listening on ${this.#serverHost}:${this.#serverPort}`));
 				this.#serverState = HTTPTestServer.#LISTENING;
 				resolve(this.#serverState);
@@ -193,7 +199,7 @@ class HTTPTestServer {
 
 			this.#serverInstance.once("error", (error) => {
 				this.#serverState = previousState;
-				reject(systemErrors.createErrorFromSystemErrorCode(error.code));
+				reject(systemErrors.createErrorFromSystemErrorCode(error["code"]));
 			});
 
 			this.#serverInstance.listen({ port: this.#serverPort, host: this.#serverHost });
@@ -203,9 +209,9 @@ class HTTPTestServer {
 	}
 
 	/**
-	 * @description Stops the HTTP Test Server instance. If the server is already in the STOPPING or STOPPED states, it returns the existing stop promise.
-	 * @returns {Promise} A promise that resolves to HTTPTestServer.STOPPED if the HTTP Test Server stops succesfully, or rejects to an error if the HTTP Test Server stop fails.
-	 * @throws {HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_NOT_IN_STOPPABLE_STATE} If the HTTP Test Server is not in a state where it is possible to stop it.
+	 * Stops the HTTP Test Server instance. If the server is already in the STOPPING or STOPPED states, it returns the existing stop promise.
+	 * @returns {Promise<symbol>} A promise that resolves to HTTPTestServer.STOPPED if the HTTP Test Server stops succesfully, or rejects to an error if the HTTP Test Server stop fails.
+	 * @throws {ERROR_HTTP_TEST_SERVER_NOT_IN_STOPPABLE_STATE} If the HTTP Test Server is not in a state where it is possible to stop it.
 	 */
 	stop() {
 		if (this.#serverState === HTTPTestServer.#STOPPING || this.#serverState === HTTPTestServer.#STOPPED) {
@@ -213,7 +219,7 @@ class HTTPTestServer {
 		}
 
 		if (this.#serverState !== HTTPTestServer.#LISTENING) {
-			throw new HTTPTestServer.errors.ERROR_HTTP_TEST_SERVER_NOT_IN_STOPPABLE_STATE();
+			throw new errors.ERROR_HTTP_TEST_SERVER_NOT_IN_STOPPABLE_STATE();
 		}
 
 		const previousState = this.#serverState;
@@ -229,7 +235,7 @@ class HTTPTestServer {
 
 			this.#serverInstance.once("error", (error) => {
 				this.#serverState = previousState;
-				reject(systemErrors.createErrorFromSystemErrorCode(error.code));
+				reject(systemErrors.createErrorFromSystemErrorCode(error["code"]));
 			});
 
 			this.#serverInstance.close();
@@ -239,7 +245,7 @@ class HTTPTestServer {
 	}
 
 	/**
-	 * @description Processes the HTTP server request
+	 * Processes the HTTP server request
 	 * @async
 	 * @param {http.IncomingMessage} request The HTTP server request object
 	 * @param {http.ServerResponse} response The HTTP server response object
@@ -258,15 +264,15 @@ class HTTPTestServer {
 		const url = new URL(request.url, `http://${request.headers.host}`);
 
 		// HTTP server request state variables
-		let silentTimeoutTimer = null;
-		let noisyRejectionSendResponseTimer = null;
-		let noisyRejectionSendResponseInterval = null;
-		let noisyTimeoutSendResponseTimer = null;
-		let noisyTimeoutSendResponseInterval = null;
-		let noisyTimeoutTimer = null;
-		let requestBodyBuffer = null;
-		let requestBodyBufferSize = 0;
-		let requestBodyArrayOfBuffers = [];
+		/** @type {NodeJS.Timeout} */ let silentTimeoutTimer = null;
+		/** @type {NodeJS.Timeout} */ let noisyRejectionSendResponseTimer = null;
+		/** @type {NodeJS.Timeout} */ let noisyRejectionSendResponseInterval = null;
+		/** @type {NodeJS.Timeout} */ let noisyTimeoutSendResponseTimer = null;
+		/** @type {NodeJS.Timeout} */ let noisyTimeoutSendResponseInterval = null;
+		/** @type {NodeJS.Timeout} */ let noisyTimeoutTimer = null;
+		/** @type {Buffer} */ let requestBodyBuffer = null;
+		/** @type {number} */ let requestBodyBufferSize = 0;
+		/** @type {Buffer[]} */ let requestBodyArrayOfBuffers = [];
 
 		// Processes the HTTP server request "error" event
 		request.on("error", (error) => {

@@ -22,7 +22,6 @@
 		"start": "node utils/start-http-test-server.js"
 	},
 	"dependencies": {
-		"@jfabello/common-errors": "^1.0.0",
 		"@jfabello/system-errors": "^1.0.0",
 		"chalk": "^4.0.0",
 		"lodash": "^4.0.0"
