@@ -6,6 +6,11 @@ The `http-test-server` module provides a simple HTTP test server. It is designed
 
 ## Table of Contents
 
+- [What is New](#what-is-new)
+  - [Version 0.4.0](#version-040)
+  - [Version 0.3.0](#version-030)
+  - [Version 0.2.0](#version-020)
+  - [Version 0.1.0](#version-010)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Using the `HTTPTestServer` Class](#using-the-httptestserver-class)
