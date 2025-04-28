@@ -77,16 +77,14 @@ To use the `http-test-server` module, you can import it into your code and then 
 ```javascript
 import { HTTPTestServer } from "@jfabello/http-test-server";
 
-async function someAsyncFunction() {
-	// Create a new HTTP Test Server instance
-	let httpServerInstance = new HTTPTestServer({ serverHost: "127.0.0.1", serverPort: 8080 });
+// Create a new HTTP Test Server instance
+let httpServerInstance = new HTTPTestServer({ serverHost: "127.0.0.1", serverPort: 8080 });
 
-	// Start the server
-	try {
-		await httpServerInstance.start();
-	} catch (error) {
-		console.error("Error starting HTTP Test Server: ", error);
-	}
+// Start the server
+try {
+	await httpServerInstance.start();
+} catch (error) {
+	console.error("Error starting HTTP Test Server: ", error);
 }
 
 someAsyncFunction();
